@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Interpreter Deck</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Realtime Translation</p>
+          <h1>Interpreter Deck</h1>
+        </div>
+        <div class="status-pill" id="connectionStatus">
+          <span class="status-dot"></span>
+          <span>Idle</span>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <section class="control-rail" aria-label="Translation controls">
+          <div class="field">
+            <label for="sourceMode">Source</label>
+            <div class="segmented" id="sourceMode" role="group" aria-label="Source audio">
+              <button class="segment active" type="button" data-source="mic">Mic</button>
+              <button class="segment" type="button" data-source="tab">Tab</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="targetLanguage">Target</label>
+            <select id="targetLanguage"></select>
+          </div>
+
+          <div class="field">
+            <label for="translatedVolume">Translated audio</label>
+            <div class="slider-row">
+              <button class="icon-button" type="button" id="muteButton" aria-label="Mute translated audio" title="Mute translated audio">
+                <span aria-hidden="true">M</span>
+              </button>
+              <input id="translatedVolume" type="range" min="0" max="1" step="0.05" value="0.85" />
+            </div>
+          </div>
+
+          <div class="button-row">
+            <button class="primary-button" id="startButton" type="button">Start</button>
+            <button class="ghost-button" id="stopButton" type="button" disabled>Stop</button>
+          </div>
+
+          <div class="meter" aria-hidden="true">
+            <canvas id="levelCanvas" width="440" height="96"></canvas>
+          </div>
+
+          <dl class="telemetry">
+            <div>
+              <dt>Signal</dt>
+              <dd id="signalValue">0%</dd>
+            </div>
+            <div>
+              <dt>WebRTC</dt>
+              <dd id="webrtcValue">--</dd>
+            </div>
+            <div>
+              <dt>Channel</dt>
+              <dd id="channelValue">--</dd>
+            </div>
+            <div>
+              <dt>Events</dt>
+              <dd id="eventCount">0</dd>
+            </div>
+            <div>
+              <dt>First caption</dt>
+              <dd id="firstCaption">--</dd>
+            </div>
+          </dl>
+        </section>
+
+        <section class="caption-stage" aria-label="Live captions">
+          <div class="stage-header">
+            <div>
+              <p class="eyebrow">Audience Monitor</p>
+              <h2 id="stageLanguage">Spanish</h2>
+            </div>
+            <button class="ghost-button compact" id="clearButton" type="button">Clear</button>
+          </div>
+
+          <div class="spotlight" id="spotlight">
+            <p id="spotlightText">Waiting for translated speech.</p>
+          </div>
+
+          <div class="transcript-grid">
+            <article class="transcript-panel">
+              <div class="panel-title">
+                <h3>Source</h3>
+                <button class="icon-button" type="button" id="copySource" aria-label="Copy source transcript" title="Copy source transcript">
+                  <span aria-hidden="true">C</span>
+                </button>
+              </div>
+              <p id="sourceTranscript"></p>
+            </article>
+
+            <article class="transcript-panel translated">
+              <div class="panel-title">
+                <h3>Translation</h3>
+                <button class="icon-button" type="button" id="pinButton" aria-label="Pin current translation" title="Pin current translation">
+                  <span aria-hidden="true">P</span>
+                </button>
+              </div>
+              <p id="translatedTranscript"></p>
+            </article>
+          </div>
+        </section>
+
+        <aside class="side-dock" aria-label="Pinned moments and events">
+          <section>
+            <div class="dock-title">
+              <h2>Pinned Moments</h2>
+              <button class="icon-button" type="button" id="clearPins" aria-label="Clear pinned moments" title="Clear pinned moments">
+                <span aria-hidden="true">X</span>
+              </button>
+            </div>
+            <div class="pins" id="pins"></div>
+          </section>
+
+          <section>
+            <div class="dock-title">
+              <h2>Session Log</h2>
+            </div>
+            <ol class="event-log" id="eventLog"></ol>
+          </section>
+        </aside>
+      </main>
+    </div>
+
+    <audio id="translatedAudio" autoplay playsinline></audio>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
